@@ -1,1 +1,1 @@
-sudo uwsgi --reload /tmp/uwsgi.pid
+sudo uwsgi --reload /tmp/uwsgi.pid 
