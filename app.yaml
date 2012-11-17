@@ -7,4 +7,4 @@ uwsgi:
     python-path:    .
     pidfile:    /tmp/uwsgi.pid
     daemonize:  /var/log/uwsgi.log
-    module: app:app
+    module: gridtime:app
