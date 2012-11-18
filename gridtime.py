@@ -121,39 +121,42 @@ def allowed_file(filename):
 
 @app.route('/createTask', methods=['POST'])
 def createTask():
-    resp = dict()
-    resp['msg'] = 'win'
-    resp['detail'] = 'task_win'
-    owner_id = flask.request.form['ownerId']
-    total_nodes_wanted = int(flask.request.form['totalNodesWanted'])
-    code = flask.request.files['deviceCode']
-    data_file = flask.request.files['dataFile']
-    if not owner_id or not server_code or not device_code:
-        resp['msg'] = 'fail'
-        resp['details'] = 'malformed_input'
-        return json.dumps(resp)
-    if not allowed_file(server_code) and not allowed_file(device_code) and not allowed_file(data_file):
-        resp['msg'] = 'fail'
-        resp['details'] = 'bad_file'
-        return json.dumps(resp)
+    if flask.request.method == 'POST':
+        resp = dict()
+        resp['msg'] = 'win'
+        resp['detail'] = 'task_win'
+        owner_id = flask.request.form['ownerId']
+        total_nodes_wanted = int(flask.request.form['totalNodesWanted'])
+        code = flask.request.files['deviceCode']
+        data_file = flask.request.files['dataFile']
+        if not owner_id or not server_code or not device_code:
+            resp['msg'] = 'fail'
+            resp['details'] = 'malformed_input'
+            return json.dumps(resp)
+        if not allowed_file(server_code) and not allowed_file(device_code) and not allowed_file(data_file):
+            resp['msg'] = 'fail'
+            resp['details'] = 'bad_file'
+            return json.dumps(resp)
 
-    code_name = secure_filename(code.filename)
-    data_file_name = secure_filename(data_file.filename)
-    code.save(os.path.join(app.config['UPLOAD_FOLDER'], code_name))
-    data_file.save(os.path.join(app.config['UPLOAD_FOLDER'], data_file_name))
-    last_id = db.execute('insert into tasks (owner_email, wanted_devices, dex_path, server_bin_path, data_file_path, name) values (%s, %s, %s, %s, %s, %s)',
-            owner_id, total_nodes_wanted, device_code_name, server_code_name, data_file_name, task_id)
-    t = db.get('select * from tasks where id = %s', last_id)
-    all_tasks[t.task_id] = t
-    running_tasks.appendleft(t.task_id)
+        code_name = secure_filename(code.filename)
+        data_file_name = secure_filename(data_file.filename)
+        code.save(os.path.join(app.config['UPLOAD_FOLDER'], code_name))
+        data_file.save(os.path.join(app.config['UPLOAD_FOLDER'], data_file_name))
+        last_id = db.execute('insert into tasks (owner_email, wanted_devices, dex_path, server_bin_path, data_file_path, name) values (%s, %s, %s, %s, %s, %s)',
+                owner_id, total_nodes_wanted, device_code_name, server_code_name, data_file_name, task_id)
+        t = db.get('select * from tasks where id = %s', last_id)
+        all_tasks[t.task_id] = t
+        running_tasks.appendleft(t.task_id)
 
-    #create the jar'd dex
-    os.system("mv " + device_code_name + " /home/ubuntu/runner/src/gridtime/Test.java")
-    os.system("cd /home/ubuntu/runner/;ant;ant release")
-    os.system("mkdir /home/ubuntu/task_jars/" + str(t['id']))
-    os.system("jar -cf /home/ubuntu/task_jars/" + str(t['id']) + "/Test.jar /home/ubuntu/runner/bin/classes.dex")
+        #create the jar'd dex
+        os.system("mv " + device_code_name + " /home/ubuntu/runner/src/gridtime/Test.java")
+        os.system("cd /home/ubuntu/runner/;ant;ant release")
+        os.system("mkdir /home/ubuntu/task_jars/" + str(t['id']))
+        os.system("jar -cf /home/ubuntu/task_jars/" + str(t['id']) + "/Test.jar /home/ubuntu/runner/bin/classes.dex")
 
-    return flask.redirect(flask.url_for('taskStatus'))
+        return flask.redirect(flask.url_for('taskStatus'))
+    else:
+        return flask.render_template('newtask.html')
 
 @app.route('/getTask')
 def getTask():
@@ -173,6 +176,7 @@ def getTask():
 
 @app.route('/submitResult', methods=['POST'])
 def submitResult():
+
     resp = dict()
     resp['msg'] = 'win'
     resp['detail'] = 'submit_win'
