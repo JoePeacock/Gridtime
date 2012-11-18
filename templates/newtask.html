@@ -76,14 +76,14 @@
 		<div class="row">
 			<div class="sevencol">
 				<div class="newtask">
-				<form method="post" action="/createTask">   
+				<form method="post" enctype="multipart/form-data" action="/createTask">   
                 
-                <label for="email">Account Email:</label><br><input type="email" name="email" type="email" placeholder="Email" id="email"><br>
-                <label for="nodes">Number of Nodes:</label><br><input type="text" name="nodes" type="nodes" placeholder="Set # of desired nodes" id="nodes"><br>    
+                <label for="email">Account Email:</label><br><input  name="ownerEmail" type="email" placeholder="Email" id="email"><br>
+                <label for="nodes">Number of Nodes:</label><br><input type="text" name="totalNodesWanted" placeholder="Set # of desired nodes" id="nodes"><br>    
 
                 <div class="floatright">
-               	<label for="cfile">Code File:</label><br><input type="file" name="file" id="file" /> <br> 
-               	<label for="dfile">Database File:</label><br><input type="file" name="file" id="file" /> <br>
+               	<label for="cfile">Code File:</label><br><input type="file" name="codeFile" id="file" /> <br> 
+               	<label for="dfile">Database File:</label><br><input type="file" name="dataFile" id="file" /> <br>
                </div>
 
                 <input class="bigbutton" id="submit" name="submit" type="submit" value="Start Processing" >            

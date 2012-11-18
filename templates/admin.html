@@ -205,38 +205,6 @@
 					{% endif %}
 			</div>
 		</div>
-				
-				
-				<!-- <p>DeviceId Owner TaskId LastCheckin</p>
-				{% for device in registered_devices %}
-				<p>{{ device.id }} {{ device.owner_email }} {{ device.task_id }} {{ device.last_checkin }}</p>
-				{% endfor %}
-				{% endif %} 
-			
-
-			<div class="fourcol">
-				<h2>Waiting Devices</h2>
-				{% if not waiting_devices %}
-				<p>No waiting devices.</p>
-				{% else %}
-				<p>DeviceId Owner TaskId LastCheckin</p>
-				{% for device in waiting_devices %}
-				<p>{{ device.id }} {{ device.owner_email }} {{ device.task_id }} {{ device.last_checkin }}</p>
-				{% endfor %}
-				{% endif %}
-			</div>-
-
-			<div class="fourcol">
-				<h2>Running Tasks</h2>
-				{% if not running_tasks %}
-				<p>No Tasks.</p>
-				{% else %}
-				<p>TaskId ActiveNodes TotalNodesWanted PathToDex PathToServerBinary</p>
-				{% for task in runnings_tasks %}
-                <p>{{task.id}} {{task.owner_email}} {{task.wanted_devices}} {{task.code_path}} {{task.data_file_path}} {{task.name}}</p>
-				{% endfor %}
-				{% endif %}
-			</div>-->
 		</div>
 	</div>
 </div> 
