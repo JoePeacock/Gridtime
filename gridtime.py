@@ -1,3 +1,4 @@
+from collections import deque
 import hashlib
 import json
 import os
@@ -15,14 +16,20 @@ app.debug = True
 
 registered_devices = dict() # {device_id: Device, ...}
 waiting_devices = dict() # {device_id: Device, ...}
-all_tasks = dict() # {task_id: Task, ...}
-running_tasks = dict() # {task_id: Task, ...}
+working_devices = dict() # {device_id: Device, ...}
+
+all_tasks = dict()
+incomplete_tasks = deque() # {task_id: Task, ...}
+running_tasks = deque() # {task_id: Task, ...}
+completed_tasks = deque() # {task_id: Task, ...}
 
 class Device(object):
     def __init__(self, d, o): 
         self.device_id = d 
         self.owner = o 
         self.current_task_id = None
+        self.last_checkin = int(time.time())
+    def updateLastCheckin(self):
         self.last_checkin = int(time.time())
 
 class Task(object):
@@ -95,7 +102,7 @@ def registerDevice():
         resp['detail'] = 'already_registered'
         return json.dumps(resp)
     if d.device_id not in waiting_devices:
-        waiting_devices[d.device_id] = d
+        waiting_devices[d.device_id] = registered_devices[d.device_id]
     else:
         resp['msg'] = 'fail'
         resp['detail'] = 'already_waiting'
@@ -103,7 +110,9 @@ def registerDevice():
     return json.dumps(resp)
 
 def distributeTask(device_id):
-    return device_id
+    if running_tasks:
+        return running_tasks[len(running_tasks) - 1]
+    return -1
 
 @app.route('/checkIn', methods=['POST'])
 def checkIn():
@@ -121,11 +130,25 @@ def checkIn():
         resp['msg'] = 'fail'
         resp['detail'] = 'not_registered'
         return json.dumps(resp)
+    registered_devices[device_id].updateLastCheckin()
     if state is 'waiting':
-        task_id = distributeTask(device_id) # distributes the next queued task to the device and returns the task id
+        if device_id not in waiting_devices:
+            waiting_devices[device_id] = registered_devices[device_id]
+        task_id = distributeTask(device_id) 
+        # If no tasks available
+        if task_id == -1:
+            resp['msg'] = 'fail'
+            resp['detail'] = 'no_avail_tasks'
+            return json.dumps(resp)
         resp['msg'] = 'win'
         resp['detail'] = 'new_task'
         resp['task_id'] = task_id
+        return json.dumps(resp)
+    if state is 'working':
+        if device_id not in working_devices:
+            working_devices[device_id] = registered_devices[device_id]
+        resp['msg'] = 'win'
+        resp['detail'] = 'auth_win'
         return json.dumps(resp)
     return json.dumps(resp)
 
@@ -159,6 +182,7 @@ def createTask():
     t = Task(owner_id, hashlib.sha256(owner_id + time.time()).hexdigest(), total_nodes_wanted,
             device_code_name, server_code_name, data_file_name)
     all_tasks[t.task_id] = t
+    running_tasks.appendleft(t.task_id)
     return flask.redirect(flask.url_for('taskStatus'))
 
 @app.route('/getTask')
@@ -178,7 +202,7 @@ def getTask():
 
 @app.route('/taskStatus')
 def taskStatus():
-    return 'hi'    
+    return flask.redirect(flask.url_for('debug'))
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -196,7 +220,7 @@ def login():
         resp['msg'] = 'fail'
         resp['detail'] = 'auth_fail'
         return json.dumps(resp)
-    return json.dumps(resp)
+    return flask.redirect(flask.url_for('taskStatus'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10080)
