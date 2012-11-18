@@ -76,7 +76,7 @@ def debug():
 
 @app.route('/')
 def hello():
-    return 'We\'re GridTime. Charge your phone, charge your wallet.'
+    return flask.render_template('index.html')
 
 @app.route('/registerDevice', methods=['POST'])
 def registerDevice():
