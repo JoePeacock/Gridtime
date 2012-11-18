@@ -22,14 +22,23 @@ def getRegisteredDevices():
     rd = dict()
     devices = db.query('select * from devices')
     for d in devices:
-        rd[str(d['id'])] = d
+        rd[d['id']] = d
     return rd
 
 def getAllTasks():
     rt = dict()
     tasks = db.query('select * from tasks')
     for t in tasks:
-        rt[str(t['id'])] = t
+        rt[t['id']] = t
+    return rt
+
+def getRunningTasks():
+    rt = deque()
+    tasks = db.query('select * from tasks')
+    for t in tasks:
+        result_count = db.get('select count(id) from results where task_id = %s', t)['count(id)']
+        if result_count < t.wanted_devices:
+            rt.appendleft(t)
     return rt
 
 registered_devices = getRegisteredDevices() # {device_id: Device, ...}
@@ -37,8 +46,7 @@ waiting_devices = dict() # {device_id: Device, ...}
 working_devices = dict() # {device_id: Device, ...}
 
 all_tasks = getAllTasks()
-incomplete_tasks = deque() # {task_id: Task, ...}
-running_tasks = deque() # {task_id: Task, ...}
+running_tasks = getRunningTasks() # {task_id: Task, ...}
 
 @app.route('/')
 def hello():
@@ -107,6 +115,9 @@ def checkIn():
         resp['detail'] = 'new_task'
         resp['task_id'] = task_id
         db.execute('update devices set task_id = %s where id = %s', task_id, device_id)
+        if device_id in waiting_devices:
+            del waiting_devices[device_id]
+        working_devices[device_id] = registered_devices[device_id]
         return json.dumps(resp)
     elif state == 'working':
         if device_id not in working_devices:
@@ -125,15 +136,15 @@ def createTask():
         resp = dict()
         resp['msg'] = 'win'
         resp['detail'] = 'task_win'
-        owner_id = flask.request.form['ownerId']
+        owner_id = flask.request.form['ownerEmail']
         total_nodes_wanted = int(flask.request.form['totalNodesWanted'])
-        code = flask.request.files['deviceCode']
+        code = flask.request.files['codeFile']
         data_file = flask.request.files['dataFile']
-        if not owner_id or not server_code or not device_code:
+        if not owner_id or not code or not data_file:
             resp['msg'] = 'fail'
             resp['details'] = 'malformed_input'
             return json.dumps(resp)
-        if not allowed_file(server_code) and not allowed_file(device_code) and not allowed_file(data_file):
+        if not allowed_file(secure_filename(code.filename)) or not allowed_file(secure_filename(data_file.filename)):
             resp['msg'] = 'fail'
             resp['details'] = 'bad_file'
             return json.dumps(resp)
@@ -142,17 +153,22 @@ def createTask():
         data_file_name = secure_filename(data_file.filename)
         code.save(os.path.join(app.config['UPLOAD_FOLDER'], code_name))
         data_file.save(os.path.join(app.config['UPLOAD_FOLDER'], data_file_name))
-        last_id = db.execute('insert into tasks (owner_email, wanted_devices, dex_path, server_bin_path, data_file_path, name) values (%s, %s, %s, %s, %s, %s)',
-                owner_id, total_nodes_wanted, device_code_name, server_code_name, data_file_name, task_id)
+        last_id = db.execute('insert into tasks (owner_email, wanted_devices, code_path, data_file_path, name) values (%s, %s, %s, %s, %s)', owner_id, total_nodes_wanted,code_name, data_file_name, 'test')
+        app.logger.info(last_id)
         t = db.get('select * from tasks where id = %s', last_id)
-        all_tasks[t.task_id] = t
-        running_tasks.appendleft(t.task_id)
+        app.logger.info(t)
+        all_tasks[t['id']] = t
+        app.logger.info(all_tasks)
+        running_tasks.appendleft(t['id'])
+        app.logger.info(running_tasks)
 
         #create the jar'd dex
-        os.system("mv " + device_code_name + " /home/ubuntu/runner/src/gridtime/Test.java")
+        os.system("mv " + code_name + " /home/ubuntu/runner/src/gridtime/Test.java")
         os.system("cd /home/ubuntu/runner/;ant;ant release")
         os.system("mkdir /home/ubuntu/task_jars/" + str(t['id']))
-        os.system("jar -cf /home/ubuntu/task_jars/" + str(t['id']) + "/Test.jar /home/ubuntu/runner/bin/classes.dex")
+        os.system("cd /home/ubuntu/runner/bin/;cp /home/ubuntu/task_jars/*.class /home/ubuntu/task_jars/" + str(t['id']) + "/")
+        os.system("jar -cf /home/ubuntu/task_jars/" + str(t['id']) + "/Test.jar classes.dex")
+        os.system("cp /home/ubuntu/task_jars/" + str(t['id']) + "/Test.jar /home/ubuntu/gridtime-server/static/task_jars/" + str(t['id']) + "/Test.jar")
 
         return flask.redirect(flask.url_for('taskStatus'))
     else:
@@ -171,8 +187,7 @@ def getTask():
     task_id = data['taskId']
     if task_id not in running_tasks:
         return str(-2)
-
-    return flask.send_file("/home/ubuntu/task_jars/" + str(data['taskId'] + "/Test.jar")) # Generate Dex file from Jar and then repackage and send over
+    return flask.send_file("/home/ubuntu/gridtime-server/static/task_jars/" + str(data['taskId'] + "/Test.jar"), attachement_filename="Test.jar", as_attachment=True) # Generate Dex file from Jar and then repackage and send over
 
 @app.route('/submitResult', methods=['POST'])
 def submitResult():
@@ -191,6 +206,12 @@ def submitResult():
     task_id = d.task_id
     result_count = db.get('select count(id) from results where task_id = %s', task_id)['count(id)']
     devices_wanted = db.get('select * from tasks where id = %s', task_id)['wanted_devices']
+
+    proc = subprocess.Popen(["java /home/ubuntu/task_jars/" + str(task_id) + "/Calc"], stdout=subprocess.PIPE, shell=True)
+    (output, err) = proc.communicate()
+    
+
+
     if result_count == devices_wanted:
         resp['msg'] = 'fail'
         resp['detail'] = 'task_done'
@@ -234,5 +255,6 @@ def signUp():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10080)
+
 
 

@@ -148,12 +148,12 @@
 			</div>
 
 			<div class="fourcol">
-				<h2>Running Tasks</h2>
-				{% if not runnings_tasks %}
+                <h2>Running Tasks</h2>
+				{% if not running_tasks %}
 				<p>No Tasks.</p>
 				{% else %}
 				<p>TaskId ActiveNodes TotalNodesWanted PathToDex PathToServerBinary</p>
-				{% for task in runnings_tasks %}
+				{% for task in running_tasks %}
                 <p>{{task.id}} {{task.owner_email}} {{task.wanted_devices}} {{task.code_path}} {{task.data_file_path}} {{task.name}}</p>
 				{% endfor %}
 				{% endif %}
