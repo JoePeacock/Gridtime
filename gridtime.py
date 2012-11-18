@@ -1,10 +1,16 @@
+import hashlib
 import json
 import os
 import time
 
 import flask
+from werkzeug import secure_filename
+
+UPLOAD_FOLDER = 'upload'
+ALLOWED_EXTENSIONS = set(['java', 'txt'])
 
 app = flask.Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
 
 registered_devices = dict() # {device_id: Device, ...}
@@ -20,12 +26,14 @@ class Device(object):
         self.last_checkin = int(time.time())
 
 class Task(object):
-    def __init__(self, t, n):
+    def __init__(self, o, t, n, ptd, ptsb, dfn):
+        self.owner = o
         self.task_id = t
         self.active_nodes = list() # [device_id, device_id, ...]
         self.total_nodes_wanted = n
-        self.path_to_dex = None
-        self.path_to_server_binary = None
+        self.path_to_dex = ptd
+        self.path_to_server_binary = ptsb
+        self.path_to_data_file = dfn
 
 @app.route('/debug')
 def debug():
@@ -121,10 +129,37 @@ def checkIn():
         return json.dumps(resp)
     return json.dumps(resp)
 
-@app.route('/createTask')
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/createTask', methods=['POST'])
 def createTask():
-    data = dict(flask.request.json)
-    return json.dumps(data)
+    resp = dict()
+    resp['msg'] = 'win'
+    resp['detail'] = 'task_win'
+    owner_id = flask.request.form['ownerId']
+    total_nodes_wanted = int(flask.request.form['totalNodesWanted'])
+    server_code = flask.request.files['serverCode']
+    device_code = flask.request.files['deviceCode']
+    data_file = flask.request.files['dataFile']
+    if not owner_id or not server_code or not device_code:
+        resp['msg'] = 'fail'
+        resp['details'] = 'malformed_input'
+        return json.dumps(resp)
+    if not allowed_file(server_code) and not allowed_file(device_code) and not allowed_file(data_file):
+        resp['msg'] = 'fail'
+        resp['details'] = 'bad_file'
+        return json.dumps(resp)
+    server_code_name = secure_filename(server_code.filename)
+    device_code_name = secure_filename(device_code.filename)
+    data_file_name = secure_filename(data_file.filename)
+    server_code.save(os.path.join(app.config['UPLOAD_FOLDER'], server_code_name))
+    device_code.save(os.path.join(app.config['UPLOAD_FOLDER'], device_code_name))
+    data_file.save(os.path.join(app.config['UPLOAD_FOLDER'], data_file_name))
+    t = Task(owner_id, hashlib.sha256(owner_id + time.time()).hexdigest(), total_nodes_wanted,
+            device_code_name, server_code_name, data_file_name)
+    all_tasks[t.task_id] = t
+    return flask.redirect(flask.url_for('taskStatus'))
 
 @app.route('/getTask')
 def getTask():
@@ -140,6 +175,10 @@ def getTask():
     if task_id not in running_tasks:
         return str(-2)
     return task_id # Generate Dex file from Jar and then repackage and send over
+
+@app.route('/taskStatus')
+def taskStatus():
+    return 'hi'    
 
 @app.route('/login', methods=['POST'])
 def login():
