@@ -198,7 +198,7 @@ def getTask():
     task_id = data['taskId']
     if task_id not in running_tasks:
         return str(-2)
-    return task_id # Generate Dex file from Jar and then repackage and send over
+    return 1 # Generate Dex file from Jar and then repackage and send over
 
 @app.route('/taskStatus')
 def taskStatus():
@@ -206,21 +206,19 @@ def taskStatus():
 
 @app.route('/login', methods=['POST'])
 def login():
-    resp = dict()
-    resp['msg'] = 'win'
-    resp['detail'] = 'auth_win'
-    data = dict(flask.request.json)
-    if 'username' not in data or 'password' not in data:
-        resp['msg'] = 'fail'
-        resp['detail'] = 'auth_fail'
-        return json.dumps(resp)
-    username = data['username']
-    password = data['password']
-    if not username or not password:
-        resp['msg'] = 'fail'
-        resp['detail'] = 'auth_fail'
-        return json.dumps(resp)
     return flask.redirect(flask.url_for('taskStatus'))
+
+@app.route('/admin')
+def admin():
+    return flask.render_template('admin.html')
+
+@app.route('/about')
+def about():
+    return flask.render_template('resabout.html')
+
+@app.route('/signUp')
+def signUp():
+    return flask.render_template('signup.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10080)
