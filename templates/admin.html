@@ -139,7 +139,7 @@
 					{% for device in registered_devices %}
 					<tr>
 						<td>{{ device.id }}</td>
-						<td>{{ device.owner_email }}</td>
+						<!-- <td>{{ device.owner_email }}</td> -->
 						<td>{{ device.task_id }}</td>
 						<td>{{ device.last_checkin }}</td>
 					</tr>
@@ -166,7 +166,7 @@
 					{% for device in waiting_devices %}
 					<tr>
 						<td>{{ device.id }}</td>
-						<td>{{ device.owner_email }}</td>
+						<!-- <td>{{ device.owner_email }}</td> -->
 						<td>{{ device.task_id }}</td>
 						<td>{{ device.last_checkin }}</td>
 					</tr>
