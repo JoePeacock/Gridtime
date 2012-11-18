@@ -189,8 +189,8 @@ def getTask():
         return str(-2)
     return 1 # Generate Dex file from Jar and then repackage and send over
 
-@app.route('/submitData', methods=['POST'])
-def submitData():
+@app.route('/submitResult', methods=['POST'])
+def submitResult():
     resp = dict()
     resp['msg'] = 'win'
     resp['detail'] = 'submit_win'
