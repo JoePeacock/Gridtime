@@ -208,6 +208,16 @@
 		padding-top: 45px;
 	}
 
+	.offsetfour {
+		margin-left: 34%;
+	}
+
+	.forgot {
+		float: left;
+		font-size: 10px;
+		
+	}
+
 /*-------------Input Fields ----------------*/
 .button {
 		border: 1px solid #CCC;

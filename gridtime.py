@@ -65,7 +65,7 @@ def debug():
         s += '<p>No Tasks.</p>'
     else:
         s += '<p>TaskId ActiveNodes TotalNodesWanted PathToDex PathToServerBinary</p>'
-        for task in running_taks:
+        for task in running_tasks:
             task =  all_tasks[task]
             s += ('<p>' + str(task.task_id) + ' [')
             for device_id in task.active_nodes:
@@ -204,13 +204,17 @@ def getTask():
 def taskStatus():
     return flask.redirect(flask.url_for('debug'))
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
-    return flask.redirect(flask.url_for('taskStatus'))
+    if flask.request.method == 'POST':
+        return flask.render_template('admin.html')        
+    else:
+        return flask.render_template('login.html')
+        
 
 @app.route('/admin')
 def admin():
-    return flask.render_template('admin.html')
+    return flask.render_template('admin.html', registered_devices = registered_devices, waiting_devices = waiting_devices, running_tasks = running_tasks)
 
 @app.route('/about')
 def about():
