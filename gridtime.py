@@ -217,7 +217,7 @@ def submitResult():
     if result_count == devices_wanted:
         resp['msg'] = 'fail'
         resp['detail'] = 'task_done'
-        if os.path.exists("/home/ubuntu/task_jars/" + str(task_id) + "/")
+        if os.path.exists("/home/ubuntu/task_jars/" + str(task_id) + "/"):
             os.system("rm -r /home/ubuntu/task_jars/" + str(task_id) + "/")
         return json.dumps(resp)
     else:
