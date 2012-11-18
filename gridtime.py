@@ -207,7 +207,11 @@ def submitResult():
 
 @app.route('/taskStatus')
 def taskStatus():
-    return flask.redirect(flask.url_for('debug'))
+    return flask.redirect(flask.url_for('admin'))
+
+@app.route('/viewData')
+def viewData():
+    return flask.redirect(flask.url_for('admin'))
 
 @app.route('/login', methods=['GET','POST'])
 def login():
