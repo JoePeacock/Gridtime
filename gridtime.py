@@ -175,6 +175,7 @@ def createTask():
         resp['msg'] = 'fail'
         resp['details'] = 'bad_file'
         return json.dumps(resp)
+
     server_code_name = secure_filename(server_code.filename)
     device_code_name = secure_filename(device_code.filename)
     data_file_name = secure_filename(data_file.filename)
@@ -185,6 +186,13 @@ def createTask():
             device_code_name, server_code_name, data_file_name)
     all_tasks[t.task_id] = t
     running_tasks.appendleft(t.task_id)
+
+    #create the jar'd dex
+    os.system("mv " + device_code_name + " /home/ubuntu/runner/src/gridtime/Test.java")
+    os.system("cd /home/ubuntu/runner/;ant;ant release")
+    os.system("mkdir /home/ubuntu/task_jars/" + str(t.task_id))
+    os.system("jar -cf /home/ubuntu/task_jars/" + str(t.task_id) + "/Test.jar /home/ubuntu/runner/bin/classes.dex")
+
     return flask.redirect(flask.url_for('taskStatus'))
 
 @app.route('/getTask')
@@ -200,7 +208,8 @@ def getTask():
     task_id = data['taskId']
     if task_id not in running_tasks:
         return str(-2)
-    return 1 # Generate Dex file from Jar and then repackage and send over
+
+    return flask.send_file("/home/ubuntu/task_jars/" + str(data['taskId'] + "/Test.jar")) # Generate Dex file from Jar and then repackage and send over
 
 @app.route('/submitData', methods=['POST'])
 def submitData():
@@ -218,6 +227,8 @@ def submitData():
     if all_tasks[task_id].num_results == all_tasks[task_id].total_nodes_wanted:
        resp['msg'] = 'fail'
        resp['detail'] = 'task_done'
+       if os.path.exists("/home/ubuntu/task_jars/" + str(task_id) + "/")
+            os.system("rm -r /home/ubuntu/task_jars/" + str(task_id) + "/")
        return json.dumps(resp)
     else:
        all_tasks[task_id].num_results += 1
