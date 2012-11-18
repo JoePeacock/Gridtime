@@ -30,5 +30,5 @@ create table if not exists results (
     value_type varchar(255),
     value varchar(255),
     task_id int,
-    device_id int
+    device_id varchar(100)
 );

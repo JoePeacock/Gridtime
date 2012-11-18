@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import time
+import subprocess
 
 import flask
 from werkzeug import secure_filename
@@ -105,16 +106,16 @@ def checkIn():
     if state == 'waiting':
         if device_id not in waiting_devices:
             waiting_devices[device_id] = registered_devices[device_id]
-        task_id = distributeTask(device_id) 
+        task = distributeTask(device_id) 
         # If no tasks available
-        if task_id == -1:
+        if task == -1:
             resp['msg'] = 'fail'
             resp['detail'] = 'no_avail_tasks'
             return json.dumps(resp)
         resp['msg'] = 'win'
         resp['detail'] = 'new_task'
-        resp['task_id'] = task_id
-        db.execute('update devices set task_id = %s where id = %s', task_id, device_id)
+        resp['task_id'] = task['id']
+        db.execute('update devices set task_id = %s where id = %s', task['id'], device_id)
         if device_id in waiting_devices:
             del waiting_devices[device_id]
         working_devices[device_id] = registered_devices[device_id]
@@ -202,7 +203,7 @@ def submitResult():
         return json.dumps(resp)
     device_id = data['deviceId']
     result = data['result']
-    d = db.get('select * from devices where id = %s')
+    d = db.get('select * from devices where id = %s', device_id)
     task_id = d.task_id
     result_count = db.get('select count(id) from results where task_id = %s', task_id)['count(id)']
     devices_wanted = db.get('select * from tasks where id = %s', task_id)['wanted_devices']
