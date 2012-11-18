@@ -170,7 +170,6 @@
 		display:inline;
 		margin-right: 20px;		
 	}
-
 		
 	.pageheader .navi a {
 		color:#333;
@@ -186,7 +185,6 @@
 		-webkit-transition: border .3s linear;
 		-ms-transition: border .3s linear;
 		-o-transition: border .3s linear;
-
 	}
 
 	.pageheader .navi .current {
@@ -194,7 +192,6 @@
 		text-decoration: none;
 		padding-bottom: 10px;
 		border-bottom: 2px solid #888;
-
 	}
 
 	.pageheader .navi a:hover {
@@ -205,7 +202,8 @@
 
 	.pagetitle {
 		float: right;
-		padding-top: 45px;
+		padding-top: 35px;
+	
 	}
 
 	.offsetfour {
@@ -214,9 +212,86 @@
 
 	.forgot {
 		float: left;
-		font-size: 10px;
-		
+		font-size: 10px;		
 	}
+
+	.adminboxtitle {
+		border-top: 1px solid #fff;
+		padding: 10px;
+		font-size: 24px;
+		color:#308b35;
+		text-shadow: 1px 1px 1px #454545;
+        filter: dropshadow(color=#454545, offx=1, offy=1);
+	}
+
+	.topbox {
+		border-bottom: 1px solid #308b35;
+		height: 110px;
+		font-size: 14px;
+		padding: 10px;
+	}
+
+	#devices {
+		padding-top: 30px;
+	}
+
+	.accountsettings {
+		color: #555;
+		font-size: 12px;
+	}
+
+	.accountsettings a{
+		text-decoration: none;
+		color: #555;
+	}
+
+	.accountsettings a:hover{
+		text-decoration: none;
+		color: #308b35;
+	}
+
+	.floatright {
+		float: right;
+	}
+
+	.adminboxlink a{
+		background-color: #FFF;
+	}
+
+	.tall {
+		height:250px;
+		background: -moz-linear-gradient(#FFFFF9, #E5E5E5);
+		background: -webkit-linear-gradient(#FFFFF9, #E5E5E5);
+		background: linear-gradient(#FFFFF9, #E5E5E5);
+		-webkit-box-shadow:  1px 1px 1px 1px rgba(0, 0, 0, .1);        
+        box-shadow:  1px 1px 1px 1px rgba(0, 0, 0, .1);	
+    }
+
+    .pricepoint {
+    	float: right;
+    	padding-right: 20px;
+    	padding-top: 45px;
+
+    }
+
+    .pricepoint .admincost {
+    	font-size:60px;
+    	margin-left: 5px;
+    	color:#333;
+    	font-weight: normal;
+
+    }
+
+    .pricepoint h2 {
+    	color:#666;
+    	font-weight: normal;
+    }
+
+    .newtask #file {
+    	background: none;
+    	border:none;
+    	box-shadow: none;
+    }
 
 /*-------------Input Fields ----------------*/
 .button {
@@ -506,6 +581,32 @@ input:focus, textarea:focus {
    background-image: -ms-linear-gradient(top, #6aa436 0%, #8dc059 100%);
    color: #fff;
    }
+
+   .newtask {
+   	height: 200px;
+   }
+
+ .newtask #email, #nodes, #cfile, #dfile {
+ 	width:230px;
+ 	clear: none;
+ }
+
+ .newtask #submit {
+ 	float: left;
+ 	height:40px;
+ }
+
+ .newtask input {
+ 	margin-bottom: 20px;
+ }
+
+ .newtask .floatright {
+ 	margin-top: -155px;
+ }
+
+
+
+
 
 
 /*------------- Misc. -------------- */

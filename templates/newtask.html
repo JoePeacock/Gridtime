@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Grid:Time | Mobile Phone Grid Computing</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!-- 1140px Grid styles for IE -->
+	<!--[if lte IE 9]><link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" /><![endif]-->
+	
+	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link rel="stylesheet" href="static/css/1140.css" type="text/css" media="screen" />	
+	
+	<!-- Your styles -->
+	<link rel="stylesheet" href="static/css/styles.css" type="text/css" media="screen" />
+	
+	<!--css3-mediaqueries-js - http://code.google.com/p/css3-mediaqueries-js/ - Enables media queries in some unsupported browsers-->
+	<script type="text/javascript" src="static/js/css3-mediaqueries.js"></script>
+
+	<!-- google fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+
+
+<body>
+
+		<div class="container">
+			<div class="row" id="topbar">
+
+				<div class="toplinks">
+					<a href="/">Login</a> - <a href="/about">About Us</a>
+				</div>	
+				<div class="social">
+						<a href="https://twitter.com/share" class="twitter-share-button" data-via="jPeacockInc">Tweet</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+					<a href="https://twitter.com/jPeacockInc" class="twitter-follow-button" data-show-count="false">Follow @jPeacockInc</a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			</div>		
+		</div>
+
+<div class="pageheader">
+	<div class="container">
+		<div class="row">
+			<div class="fourcol">
+				<a href="/"><img src="static/img/logo.png" alt="Grid Time Alpha" id="pagelogo"></a>
+				<p>"Charge your phone, charge your wallet"</p>
+			</div>
+		<div class="eightcol">
+				<div class="floatright">
+					<h2 class="pagetitle">Welcome to the Grid, GridTime Devs</h2><br>
+					<p class="accountsettings"><a href="#">Admin Home</a> | <a href="#">My Data</a> | <a href="#">Account Settings</a> | <a href="#">Payment Options</a></p>
+				</div>
+			</div>
+
+		</div>
+	</div><!-- end container -->
+
+</div><!-- end header -->
+
+<div class="container">
+	<div class="row">
+		<hr class="divider">
+	</div>
+</div>
+
+
+<div class="body">
+	<div class="container">
+		<div class="row">
+			<h2>Create New Task</h2>
+			<h3>Set your parameters, we'll calculate your operating cost and start processing.</h3>
+		</div><!-- end row -->
+		<div class="row">
+			<div class="sevencol">
+				<div class="newtask">
+				<form method="post" action="/createTask">   
+                
+                <label for="email">Account Email:</label><br><input type="email" name="email" type="email" placeholder="Email" id="email"><br>
+                <label for="nodes">Number of Nodes:</label><br><input type="text" name="nodes" type="nodes" placeholder="Set # of desired nodes" id="nodes"><br>    
+
+                <div class="floatright">
+               	<label for="cfile">Code File:</label><br><input type="file" name="file" id="file" /> <br> 
+               	<label for="dfile">Database File:</label><br><input type="file" name="file" id="file" /> <br>
+               </div>
+
+                <input class="bigbutton" id="submit" name="submit" type="submit" value="Start Processing" >            
+               
+            	</form>
+            </div>
+			
+			</div>	
+
+			<div class="fourcol">
+			<div class="pricepoint">
+			<h2>Price: <span class="admincost">$0.00</span></h2>
+			
+		</div>
+			</div>			
+		</div><!-- end row -->
+	</div><!-- end container -->
+</div><!-- end headmast -->
+
+<!-- <div class="home">
+	<div class="container">
+	
+		<div class="row">
+			<div class="bigbox boxshadow">
+			<div class="fourcol box" id="firstlilbox">
+				<h3 class="title">Start processing with us.</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis tellus non augue fermentum rhoncus. Proin sagittis malesuada pellentesque.</p> <p> Aliquam porttitor aliquet dui quis sagittis Aliquam nec arcu eget nisi vestibulum tristique. </p><br>
+					<p><a href="#" class="medbutton center">Start Computing Today &raquo;</a>
+				</p>
+				
+				</div>
+	
+			<div class="fourcol box">
+				<h3 class="title">Join our network of mobile devices. </h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis tellus non augue fermentum rhoncus. Proin sagittis malesuada pellentesque.</p> <p> Aliquam porttitor aliquet dui quis sagittis Aliquam nec arcu eget nisi vestibulum tristique. </p><br>
+				<p><a href="#" class="medbutton">Learn More &raquo;</a></p>
+			</div>
+			
+			<div class="fourcol box">
+			
+				<h3 class="title">Client Login.</h3>
+				<div class="login">
+				<form method="post" action="/login">   
+                
+                <input type="text" name="username" placeholder="Username" id="username"><br>        
+               	<input type="password" name="password" type="pass" placeholder="Password" id="password"><br>
+
+                <input class="button" name="submit" type="submit" value="Login" >            
+               
+            	</form>
+            </div>
+           </div>
+			</div> 
+		</div>
+	</div>
+</div> -->
+
+
+<div class="footer">
+	<div class="container">
+		<div class="row" id="footer">
+			<p class="copyright">Copyright &copy; 2012 Nick DiRienzo - Patrick Jameson - Joseph Peacock</p>
+		</div>
+	</div>
+</div>
+
+
+<!-- Javascriptssss -->
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+
+
+</body>
+
+</html>
