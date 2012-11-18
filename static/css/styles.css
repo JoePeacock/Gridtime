@@ -226,7 +226,7 @@
 
 	.topbox {
 		border-bottom: 1px solid #308b35;
-		height: 230px;
+		height: 110px;
 		font-size: 14px;
 		padding: 10px;
 	}
@@ -259,9 +259,13 @@
 	}
 
 	.tall {
-		height:300px;
-	}
-
+		height:250px;
+		background: -moz-linear-gradient(#FFFFF9, #E5E5E5);
+		background: -webkit-linear-gradient(#FFFFF9, #E5E5E5);
+		background: linear-gradient(#FFFFF9, #E5E5E5);
+		-webkit-box-shadow:  1px 1px 1px 1px rgba(0, 0, 0, .1);        
+        box-shadow:  1px 1px 1px 1px rgba(0, 0, 0, .1);	
+    }
 
 /*-------------Input Fields ----------------*/
 .button {
