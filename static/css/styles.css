@@ -604,6 +604,11 @@ input:focus, textarea:focus {
  	margin-top: -155px;
  }
 
+ tr {
+ 	padding:5px;
+ 	width:100px;
+ }
+
 
 
 
