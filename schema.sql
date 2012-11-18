@@ -1,6 +1,6 @@
 create table if not exists devices (
     id varchar(100),
-    owner_id int not null,
+    owner_email varchar(255),
     task_id int,
     last_checkin datetime null default null,
     primary key (id)
@@ -18,10 +18,9 @@ create table if not exists owners (
 
 create table if not exists tasks (
     id int auto_increment primary key,
-    owner_id int,
+    owner_email varchar(255),
     wanted_devices int,
-    dex_path varchar(255),
-    server_bin_path varchar(255),
+    code_path varchar(255),
     data_file_path varchar(255),
     name varchar(255)
 );

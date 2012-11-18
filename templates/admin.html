@@ -83,12 +83,12 @@
 			<h3>Device Overview:</h3>
 			<div class="fourcol">
 				<h2>Registered Devices</h2>
-				{% if not registered_devicse %}
+				{% if not registered_devices %}
 				<p>No Registered devices.</p>
 				{% else %}
 				<p>DeviceId Owner TaskId LastCheckin</p>
 				{% for device in registered_devices %}
-				<p>{{ device.device.id }} {{ device.owner }} {{ device.current_task_id }} {{ device.last_checkin }}</p>
+				<p>{{ device.id }} {{ device.owner_email }} {{ device.task_id }} {{ device.last_checkin }}</p>
 				{% endfor %}
 				{% endif %}
 			</div>
@@ -100,7 +100,7 @@
 				{% else %}
 				<p>DeviceId Owner TaskId LastCheckin</p>
 				{% for device in waiting_devices %}
-				<p>{{ device.device.id }} {{ device.owner }} {{ device.current_task_id }} {{ device.last_checkin }}</p>
+				<p>{{ device.id }} {{ device.owner_email }} {{ device.task_id }} {{ device.last_checkin }}</p>
 				{% endfor %}
 				{% endif %}
 			</div>
@@ -112,7 +112,7 @@
 				{% else %}
 				<p>TaskId ActiveNodes TotalNodesWanted PathToDex PathToServerBinary</p>
 				{% for task in runnings_tasks %}
-				<p>{{task.task_id}} {% for device_id in task.active_nodes %} [{{device.id}},] {% endfor %} {{task.total_nodes_wanted}} {{task.path_to_dex}} {{task.path_to_server_binary}}</p>
+                <p>{{task.id}} {{task.owner_email}} {{task.wanted_devices}} {{task.code_path}} {{task.data_file_path}} {{task.name}}</p>
 				{% endfor %}
 				{% endif %}
 			</div>
