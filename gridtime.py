@@ -212,14 +212,14 @@ def submitData():
         resp['msg'] = 'fail'
         resp['detail'] = 'malformed_submit'
         return json.dumps(resp)
-   device_id = data['deviceId']
-   result = data['result']
-   task_id = all_devices[device_id].current_task_id
-   if all_tasks[task_id].num_results == all_tasks[task_id].total_nodes_wanted:
+    device_id = data['deviceId']
+    result = data['result']
+    task_id = all_devices[device_id].current_task_id
+    if all_tasks[task_id].num_results == all_tasks[task_id].total_nodes_wanted:
        resp['msg'] = 'fail'
        resp['detail'] = 'task_done'
        return json.dumps(resp)
-   else:
+    else:
        all_tasks[task_id].num_results += 1
        del working_devices[device_id]
        waiting_devices[device_id] = all_devices[device_id]
