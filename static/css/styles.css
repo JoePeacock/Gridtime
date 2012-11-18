@@ -612,6 +612,7 @@ input:focus, textarea:focus {
  td {
  	width:150px;
  	padding:5px;
+ 	text-align: center;
  }
 
  th {
