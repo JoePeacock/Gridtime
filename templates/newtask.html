@@ -11,10 +11,10 @@
 	<!--[if lte IE 9]><link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" /><![endif]-->
 	
 	<!-- The 1140px Grid - http://cssgrid.net/ -->
-	<link rel="stylesheet" href="../static/css/1140.css" type="text/css" media="screen" />	
+	<link rel="stylesheet" href="static/css/1140.css" type="text/css" media="screen" />	
 	
 	<!-- Your styles -->
-	<link rel="stylesheet" href="../static/css/styles.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="static/css/styles.css" type="text/css" media="screen" />
 	
 	<!--css3-mediaqueries-js - http://code.google.com/p/css3-mediaqueries-js/ - Enables media queries in some unsupported browsers-->
 	<script type="text/javascript" src="static/js/css3-mediaqueries.js"></script>
@@ -38,28 +38,20 @@
 				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 					<a href="https://twitter.com/jPeacockInc" class="twitter-follow-button" data-show-count="false">Follow @jPeacockInc</a>
 				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-			</div>
-		
+			</div>		
 		</div>
-
-
-owner email
-device
-total nodes
-code
-datafile
 
 <div class="pageheader">
 	<div class="container">
 		<div class="row">
 			<div class="fourcol">
-				<a href="/"><img src="../static/img/logo.png" alt="Grid Time Alpha" id="pagelogo"></a>
+				<a href="/"><img src="static/img/logo.png" alt="Grid Time Alpha" id="pagelogo"></a>
 				<p>"Charge your phone, charge your wallet"</p>
 			</div>
 		<div class="eightcol">
 				<div class="floatright">
 					<h2 class="pagetitle">Welcome to the Grid, GridTime Devs</h2><br>
-					<p class="accountsettings"><a href="#">Account Settings</a> | <a href="#">Payment Options</a></p>
+					<p class="accountsettings"><a href="#">Admin Home</a> | <a href="#">My Data</a> | <a href="#">Account Settings</a> | <a href="#">Payment Options</a></p>
 				</div>
 			</div>
 
@@ -78,28 +70,35 @@ datafile
 <div class="body">
 	<div class="container">
 		<div class="row">
-			<h2>Create Account</h2>
-			<h3>Once you're set up, you can start your processing on our system.</h3>
+			<h2>Create New Task</h2>
+			<h3>Set your parameters, we'll calculate your operating cost and start processing.</h3>
 		</div><!-- end row -->
 		<div class="row">
-			<div class="twelvecol">
-				<div class="signup">
-				<form method="post" action="/login">   
+			<div class="sevencol">
+				<div class="newtask">
+				<form method="post" action="/createTask">   
                 
-                <input type="text" name="firstname" type="firstname" placeholder="First Name" id="firstname"><br>
-                <input type="text" name="lastname" type="lastname" placeholder="Last Name" id="lastname"><br>
-                <input type="text" name="username" placeholder="Username" id="username"><br>        
-               	<input type="password" name="password" placeholder="Password" id="password"><br>
-               	<input type="password" name="password" placeholder="Re-Type Password" id="password"><br>
-               	<input type="text" name="university" placeholder="University or Affiliated Research" id="university"><br> 
+                <label for="email">Account Email:</label><br><input type="email" name="email" type="email" placeholder="Email" id="email"><br>
+                <label for="nodes">Number of Nodes:</label><br><input type="text" name="nodes" type="nodes" placeholder="Set # of desired nodes" id="nodes"><br>    
 
+                <div class="floatright">
+               	<label for="cfile">Code File:</label><br><input type="file" name="file" id="file" /> <br> 
+               	<label for="dfile">Database File:</label><br><input type="file" name="file" id="file" /> <br>
+               </div>
 
-                <input class="button" name="submit" type="submit" value="Login" >            
+                <input class="bigbutton" id="submit" name="submit" type="submit" value="Start Processing" >            
                
             	</form>
             </div>
 			
-			</div>				
+			</div>	
+
+			<div class="fourcol">
+			<div class="pricepoint">
+			<h2>Price: <span class="admincost">$0.00</span></h2>
+			
+		</div>
+			</div>			
 		</div><!-- end row -->
 	</div><!-- end container -->
 </div><!-- end headmast -->

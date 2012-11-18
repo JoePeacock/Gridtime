@@ -202,7 +202,7 @@
 
 	.pagetitle {
 		float: right;
-		padding-top: 45px;
+		padding-top: 35px;
 	
 	}
 
@@ -265,6 +265,32 @@
 		background: linear-gradient(#FFFFF9, #E5E5E5);
 		-webkit-box-shadow:  1px 1px 1px 1px rgba(0, 0, 0, .1);        
         box-shadow:  1px 1px 1px 1px rgba(0, 0, 0, .1);	
+    }
+
+    .pricepoint {
+    	float: right;
+    	padding-right: 20px;
+    	padding-top: 45px;
+
+    }
+
+    .pricepoint .admincost {
+    	font-size:60px;
+    	margin-left: 5px;
+    	color:#333;
+    	font-weight: normal;
+
+    }
+
+    .pricepoint h2 {
+    	color:#666;
+    	font-weight: normal;
+    }
+
+    .newtask #file {
+    	background: none;
+    	border:none;
+    	box-shadow: none;
     }
 
 /*-------------Input Fields ----------------*/
@@ -555,6 +581,32 @@ input:focus, textarea:focus {
    background-image: -ms-linear-gradient(top, #6aa436 0%, #8dc059 100%);
    color: #fff;
    }
+
+   .newtask {
+   	height: 200px;
+   }
+
+ .newtask #email, #nodes, #cfile, #dfile {
+ 	width:230px;
+ 	clear: none;
+ }
+
+ .newtask #submit {
+ 	float: left;
+ 	height:40px;
+ }
+
+ .newtask input {
+ 	margin-bottom: 20px;
+ }
+
+ .newtask .floatright {
+ 	margin-top: -155px;
+ }
+
+
+
+
 
 
 /*------------- Misc. -------------- */
