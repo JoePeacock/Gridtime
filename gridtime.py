@@ -119,7 +119,7 @@ def checkIn():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/createTask', methods=['POST'])
+@app.route('/createTask', methods=['POST', 'GET'])
 def createTask():
     if flask.request.method == 'POST':
         resp = dict()
